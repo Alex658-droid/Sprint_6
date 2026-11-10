@@ -27,15 +27,10 @@
    ```powershell
    allure serve allure-results
 
-Структура проекта
-tests/ — тестовые сценарии.
-pages/ — Page Object классы.
-locators/ — локаторы элементов.
-data.py — тестовые данные.
-utils/ — вспомогательные методы.
-Технологии
-Python 3.14.7
-pytest 9.2.0
-Selenium
-Allure 2.46.1
-Firefox + geckodriver
+## Структура проекта
+
+- `tests/` — тестовые сценарии.
+- `pages/` — Page Object классы.
+- `locators/` — локаторы элементов.
+- `conftest.py` — фикстуры браузера и открытия страницы.
+- `data.py` — тестовые данные.
