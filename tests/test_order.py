@@ -1,7 +1,8 @@
 import allure
+from urllib.parse import urlparse
+
 import pytest
 from data import MAIN_PAGE, ORDER_DATA, ENTRY_POINTS
-from pages.main_page import MainPage
 from pages.order_page import OrderPage
 
 
@@ -11,11 +12,7 @@ class TestOrder:
     @allure.title("Заказ оформлен: точка входа «{entry_point}», данные «{data[first_name]} {data[last_name]}»")
     @pytest.mark.parametrize("entry_point", ENTRY_POINTS)
     @pytest.mark.parametrize("data", ORDER_DATA)
-    def test_order_positive_flow(self, driver, entry_point, data):
-        main_page = MainPage(driver)
-        order_page = OrderPage(driver)
-        with allure.step("Открыть главную страницу"):
-            main_page.open(MAIN_PAGE)
+    def test_order_positive_flow(self, main_page, order_page, entry_point, data):
         with allure.step(f"Нажать кнопку «Заказать» ({entry_point})"):
             main_page.click_order_button(entry_point)
         with allure.step("Заполнить первую форму заказа"):
@@ -31,8 +28,8 @@ class TestOrder:
         with allure.step("Клик по логотипу «Самоката» ведёт на главную страницу"):
             main_page.click_scooter_logo()
             main_page.wait_url_to_be(MAIN_PAGE)
-            assert driver.current_url == MAIN_PAGE, (
-                f"Логотип «Самоката» не ведёт на главную: {driver.current_url}"
+            assert main_page.get_current_url() == MAIN_PAGE, (
+                f"Логотип «Самоката» не ведёт на главную: {main_page.get_current_url()}"
             )
 
 
@@ -40,13 +37,12 @@ class TestLogoRedirect:
     @allure.feature("Заказ самоката")
     @allure.story("Редиректы логотипов")
     @allure.title("Клик по логотипу Яндекса открывает Дзен в новом окне")
-    def test_yandex_logo_opens_dzen(self, driver):
-        main_page = MainPage(driver)
-        with allure.step("Открыть главную страницу"):
-            main_page.open(MAIN_PAGE)
+    def test_yandex_logo_opens_dzen(self, main_page):
         with allure.step("Кликнуть по логотипу Яндекса"):
             main_page.click_yandex_logo()
         with allure.step("Переключиться в новое окно и проверить редирект на Дзен"):
             main_page.switch_to_new_window()
-            main_page.wait_url_contains("dzen.ru")
-            assert "dzen.ru" in driver.current_url, f"Редирект на Дзен не сработал: {driver.current_url}"
+            main_page.wait_for_domain("dzen.ru")
+            assert urlparse(main_page.get_current_url()).netloc == "dzen.ru", (
+                f"Редирект на Дзен не сработал: {main_page.get_current_url()}"
+            )

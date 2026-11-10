@@ -52,3 +52,7 @@ ORDER_DATA = [
 
 # Точки входа в сценарий заказа
 ENTRY_POINTS = ["top", "bottom"]
+
+
+# Адрес Дзена, на который ведёт логотип Яндекса
+DZEN_PAGE = "https://dzen.ru/"
