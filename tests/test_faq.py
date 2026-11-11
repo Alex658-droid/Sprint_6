@@ -1,6 +1,6 @@
 import allure
 import pytest
-from data import MAIN_PAGE, FAQ
+from data import FAQ
 from pages.main_page import MainPage
 
 # Превращаем пары (вопрос, ответ) в тройки с индексом: 0..7
@@ -12,10 +12,7 @@ class TestFaq:
     @allure.story("Вопросы о важном")
     @allure.title("Проверка выпадающего списка: вопрос №{index} открывает свой ответ")
     @pytest.mark.parametrize("index,question,expected_answer", FAQ_WITH_INDEX)
-    def test_faq_answer_opens(self, driver, index, question, expected_answer):
-        main_page = MainPage(driver)
-        with allure.step("Открыть главную страницу"):
-            main_page.open(MAIN_PAGE)
+    def test_faq_answer_opens(self, main_page, index, question, expected_answer):
         with allure.step(f"Нажать на вопрос: «{question}»"):
             main_page.click_faq_question(index)
         with allure.step("Проверить, что открылся соответствующий текст ответа"):
