@@ -6,8 +6,8 @@ from locators.order_page_locators import OrderPageLocators
 
 
 class OrderPage(BasePage):
-    @staticmethod
-    def fmt(locator, value):
+    @allure.step("Подставить значение '{value}' в шаблон локатора")
+    def fmt(self, locator, value):
         """Подставляет значение в шаблонный локатор вида ('xpath', '...{}...')."""
         return (locator[0], locator[1].format(value))
 
